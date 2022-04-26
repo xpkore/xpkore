@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <title>!SVBM</title>
+    <!-- wow look at this guy who write this in pure html+js what a noob who does that in 2022 -->
+    <!-- imagine needing libraries to get this to work -->
+    <style>
+      body {
+        text-align: center;;
+      }
+      textarea {
+        width: 400px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <input type="text" id="input" onchange="">
+    <hr>
+    <textarea id="content"></textarea>
+
+    <script>
+
+      setInterval(()=>{update()}, 100);
+
+      // afronova, but with mines
+      // 
+      var initialLine = "L0U0R10L0D40R0L0U0R10L0D40R0"
+      document.getElementById("input").value = initialLine;
+
+      function newLine() {
+        // values:
+        // null, "step", "mine"
+        return {
+          U: null,
+          D: null,
+          L: null,
+          R: null,
+        }
+      }
+
+
+      function update() {
+
+        var input = document.getElementById("input").value;
+        var currentLine = 0;
+        var lines = [];
+
+        // object type:
+        for (var i = 0; i < input.length; i++) {
+          var item = input[i];
+          // does current line exist?
+          if (lines.length <= currentLine) {
+            lines.push(newLine())
+          }
+          switch (item) {
+              // arrows
+              case "L": lines[currentLine]["L"] = "step"; break;
+              case "U": lines[currentLine]["U"] = "step"; break;
+              case "D": lines[currentLine]["D"] = "step"; break;
+              case "R": lines[currentLine]["R"] = "step"; break;
+              // mines
+              case "1": lines[currentLine]["L"] = "mine"; break;
+              case "2": lines[currentLine]["U"] = "mine"; break;
+              case "3": lines[currentLine]["D"] = "mine"; break;
+              case "4": lines[currentLine]["R"] = "mine"; break;
+              // move a step
+              case "0": currentLine++; break;
+          }
+        }
+
+        printData(lines);
+
+      }
+
+      function printData(data) {
+
+        var textContent = [];
+        
+        var step_L = ":arrow_left:"
+        var step_U = ":arrow_up:"
+        var step_D = ":arrow_down:"
+        var step_R = ":arrow_right:"
+        var mine = ":mine:";
+        var empty = ":black_large_square:";
+
+        for (var i = 0; i < data.length; i++) {
+          var currentLine = "";
+          var L = empty;
+          var U = empty;
+          var D = empty;
+          var R = empty;
+
+          if (data[i].L == "step") { L = step_L; }
+          if (data[i].U == "step") { U = step_U; }
+          if (data[i].D == "step") { D = step_D; }
+          if (data[i].R == "step") { R = step_R; }
+
+          if (data[i].L == "mine") { L = mine; }
+          if (data[i].U == "mine") { U = mine; }
+          if (data[i].D == "mine") { D = mine; }
+          if (data[i].R == "mine") { R = mine; }
+
+          currentLine = L + " " +  U + " " +  D + " " +  R;
+          
+          textContent.push(currentLine);
+
+        }
+
+        var finalContent = textContent.join("\n");
+
+        document.getElementById("content").value = finalContent;
+
+      }
+
+    </script>
+
+  </body>
+</html>
